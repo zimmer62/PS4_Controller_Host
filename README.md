@@ -1,6 +1,8 @@
 # PS4_Controller_Host
 Allows ESP32 to communicate with PS4 controller (can be used to control robots and other devices)
 
+(This was forked to add support for the touchpad)
+
 This is heavily based on the work of Albert III to connect a PS4 controller to an ESP32.
 You can find that here: https://github.com/aed3/PS4-esp32
 
