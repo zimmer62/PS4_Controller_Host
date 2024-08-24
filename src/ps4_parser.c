@@ -28,7 +28,15 @@ enum ps4_packet_index {
   packet_index_sensor_accelerometer_y = 33,
   packet_index_sensor_accelerometer_z = 35,
 
-  packet_index_status = 42
+  packet_index_status = 42,
+
+  packet_index_touchpad_finger_1_touching = 47,  
+  packet_index_touchpad_finger_1_x = 48,
+  packet_index_touchpad_finger_1_y = 49,
+  packet_index_touchpad_finger_2_touching = 51,
+  packet_index_touchpad_finger_2_x = 52,
+  packet_index_touchpad_finger_2_y = 53,
+
 };
 
 enum ps4_button_mask {
@@ -76,6 +84,7 @@ enum ps4_status_mask {
 /********************************************************************************/
 
 ps4_sensor_t parsePacketSensor(uint8_t* packet);
+ps4_touchpad_t parsePacketTouchpad(uint8_t* packet);
 ps4_status_t parsePacketStatus(uint8_t* packet);
 ps4_analog_stick_t parsePacketAnalogStick(uint8_t* packet);
 ps4_analog_button_t parsePacketAnalogButton(uint8_t* packet);
@@ -104,6 +113,7 @@ void parsePacket(uint8_t* packet) {
   ps4.analog.button = parsePacketAnalogButton(packet);
   ps4.sensor = parsePacketSensor(packet);
   ps4.status = parsePacketStatus(packet);
+  ps4.touchpad = parsePacketTouchpad(packet);
   ps4.latestPacket = packet;
 
   ps4_event_t ps4Event = parseEvent(prev_ps4, ps4);
@@ -287,4 +297,23 @@ ps4_sensor_t parsePacketSensor(uint8_t* packet) {
   ps4Sensor.accelerometer.z = (packet[packet_index_sensor_accelerometer_z + 1] << 8) + packet[packet_index_sensor_accelerometer_z];
 
   return ps4Sensor;
+}
+
+/***********************/
+/*   T O U C H P A D   */
+/***********************/
+ps4_touchpad_t parsePacketTouchpad(uint8_t* packet) {
+  ps4_touchpad_t ps4Touchpad;
+
+  ps4Touchpad.finger_1_touching = !(packet[packet_index_touchpad_finger_1_touching] & 0x80);  
+  ps4Touchpad.finger_2_touching = !(packet[packet_index_touchpad_finger_2_touching] & 0x80);
+
+  
+  ps4Touchpad.finger_1_x = (packet[packet_index_touchpad_finger_1_x] | ((packet[packet_index_touchpad_finger_1_x + 1] & 0x0F) << 8));
+  ps4Touchpad.finger_1_y = ((packet[packet_index_touchpad_finger_1_y] >> 4) | (packet[packet_index_touchpad_finger_1_y + 1] << 4));
+
+  ps4Touchpad.finger_2_x = (packet[packet_index_touchpad_finger_2_x] | ((packet[packet_index_touchpad_finger_2_x + 1] & 0x0F) << 8));
+  ps4Touchpad.finger_2_y = ((packet[packet_index_touchpad_finger_2_y] >> 4) | (packet[packet_index_touchpad_finger_2_y + 1] << 4));
+
+  return ps4Touchpad;
 }

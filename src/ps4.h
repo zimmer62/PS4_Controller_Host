@@ -95,6 +95,15 @@ typedef struct {
   ps4_sensor_gyroscope_t gyroscope;
 } ps4_sensor_t;
 
+typedef struct {
+  int16_t finger_1_x;
+  int16_t finger_1_y;
+  bool finger_1_touching;
+  int16_t finger_2_x;
+  int16_t finger_2_y;
+  bool finger_2_touching;
+} ps4_touchpad_t;
+
 /*******************/
 /*    O T H E R    */
 /*******************/
@@ -118,6 +127,7 @@ typedef struct {
   ps4_button_t button;
   ps4_status_t status;
   ps4_sensor_t sensor;
+  ps4_touchpad_t touchpad;
   uint8_t* latestPacket;
 } ps4_t;
 

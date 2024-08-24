@@ -165,6 +165,28 @@ public:
     return data.sensor.accelerometer.z;
   }
 
+  bool Finger1Touching() {
+    return data.touchpad.finger_1_touching;
+  }
+  int16_t Finger1X() {
+    return data.touchpad.finger_1_x;
+  }
+  int16_t Finger1Y() {
+    return data.touchpad.finger_1_y;
+  }
+  
+  bool Finger2Touching() {
+    return data.touchpad.finger_2_touching;
+  }
+  int16_t Finger2X() {
+    return data.touchpad.finger_2_x;
+  }
+  int16_t Finger2Y() {
+    return data.touchpad.finger_2_y;
+  }
+  
+
+
 private:
   static void _event_callback(void* object, ps4_t data, ps4_event_t event);
   static void _connection_callback(void* object, uint8_t isConnected);
